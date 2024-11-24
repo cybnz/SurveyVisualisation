@@ -1,3 +1,4 @@
 spacy~=3.8.2
 pandas~=2.2.3
 matplotlib~=3.9.2
+circlify~=0.15.0
