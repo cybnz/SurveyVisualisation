@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="First test processing text feedback">
-      <change afterPath="$PROJECT_DIR$/word_cloud.ipynb" afterDir="false" />
+    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Circle packing visualisation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/word_cloud.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/word_cloud.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +79,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732436892335</updated>
-      <workItem from="1732436893519" duration="3316000" />
+      <workItem from="1732436893519" duration="16718000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -97,7 +97,23 @@
       <option name="project" value="LOCAL" />
       <updated>1732439221865</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Count specified comma-delim values">
+      <option name="closed" value="true" />
+      <created>1732478053142</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1732478053142</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Circle packing visualisation">
+      <option name="closed" value="true" />
+      <created>1732480012009</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1732480012009</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -106,6 +122,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="First test processing text feedback" />
-    <option name="LAST_COMMIT_MESSAGE" value="First test processing text feedback" />
+    <MESSAGE value="Count specified comma-delim values" />
+    <MESSAGE value="Circle packing visualisation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Circle packing visualisation" />
   </component>
 </project>
