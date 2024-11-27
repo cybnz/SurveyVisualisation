@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Increased readability">
+    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Partially modularised for use with other columns">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/word_cloud.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/word_cloud.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +82,8 @@
       <updated>1732436892335</updated>
       <workItem from="1732436893519" duration="16718000" />
       <workItem from="1732664387292" duration="299000" />
-      <workItem from="1732664699401" duration="3739000" />
+      <workItem from="1732664699401" duration="4551000" />
+      <workItem from="1732677054088" duration="3091000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -123,7 +125,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732664487160</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Partially modularised for use with other columns">
+      <option name="closed" value="true" />
+      <created>1732673639447</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1732673639447</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -135,6 +145,7 @@
     <MESSAGE value="Count specified comma-delim values" />
     <MESSAGE value="Circle packing visualisation" />
     <MESSAGE value="Increased readability" />
-    <option name="LAST_COMMIT_MESSAGE" value="Increased readability" />
+    <MESSAGE value="Partially modularised for use with other columns" />
+    <option name="LAST_COMMIT_MESSAGE" value="Partially modularised for use with other columns" />
   </component>
 </project>
