@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Partially modularised for use with other columns">
-      <change afterPath="$PROJECT_DIR$/likert_ranking.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/SurveyVisualisation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SurveyVisualisation.iml" afterDir="false" />
+    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Ranking questions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/word_cloud.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/word_cloud.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/likert_ranking.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/likert_ranking.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +85,7 @@
       <workItem from="1732664387292" duration="299000" />
       <workItem from="1732664699401" duration="4551000" />
       <workItem from="1732677054088" duration="3091000" />
-      <workItem from="1732934113820" duration="3174000" />
+      <workItem from="1732934113820" duration="5062000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -138,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732673639447</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Ranking questions">
+      <option name="closed" value="true" />
+      <created>1732940420597</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1732940420597</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,6 +156,7 @@
     <MESSAGE value="Circle packing visualisation" />
     <MESSAGE value="Increased readability" />
     <MESSAGE value="Partially modularised for use with other columns" />
-    <option name="LAST_COMMIT_MESSAGE" value="Partially modularised for use with other columns" />
+    <MESSAGE value="Ranking questions" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ranking questions" />
   </component>
 </project>
