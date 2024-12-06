@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Ranking questions">
+    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Basic strata sampling">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/likert_ranking.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/likert_ranking.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/participants.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/participants.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,12 +29,12 @@
     &quot;assignee&quot;: &quot;cybnz&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/cybnz/SurveyVisualisation.git",
-    "accountId": "0026c5e9-f6eb-477b-a8d6-4bca22ac0de0"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/cybnz/SurveyVisualisation.git&quot;,
+    &quot;accountId&quot;: &quot;0026c5e9-f6eb-477b-a8d6-4bca22ac0de0&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -44,21 +44,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/Users/ben/PycharmProjects/SurveyVisualisation/data",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ben/PycharmProjects/SurveyVisualisation/data&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data" />
@@ -85,7 +85,9 @@
       <workItem from="1732664387292" duration="299000" />
       <workItem from="1732664699401" duration="4551000" />
       <workItem from="1732677054088" duration="3091000" />
-      <workItem from="1732934113820" duration="5062000" />
+      <workItem from="1732934113820" duration="5567000" />
+      <workItem from="1733127109682" duration="2454000" />
+      <workItem from="1733292569882" duration="5999000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -143,7 +145,23 @@
       <option name="project" value="LOCAL" />
       <updated>1732940420597</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Move Likert graphs into single plot">
+      <option name="closed" value="true" />
+      <created>1732947266907</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1732947266907</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Basic strata sampling">
+      <option name="closed" value="true" />
+      <created>1733133535375</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1733133535375</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,6 +175,8 @@
     <MESSAGE value="Increased readability" />
     <MESSAGE value="Partially modularised for use with other columns" />
     <MESSAGE value="Ranking questions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ranking questions" />
+    <MESSAGE value="Move Likert graphs into single plot" />
+    <MESSAGE value="Basic strata sampling" />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic strata sampling" />
   </component>
 </project>
