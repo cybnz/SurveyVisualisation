@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Basic strata sampling">
+      <change afterPath="$PROJECT_DIR$/create_figures.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/SurveyVisualisation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SurveyVisualisation.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/participants.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/participants.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/likert_ranking.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/likert_ranking.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/word_cloud.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/word_cloud.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,8 +52,9 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;full.screen.before.presentation.mode&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ben/PycharmProjects/SurveyVisualisation/data&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/bjo5/PycharmProjects/SurveyVisualisation/data&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -61,15 +66,15 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/data" />
       <recent name="C:\Users\bjo5\PycharmProjects\SurveyVisualisation\data" />
+      <recent name="$PROJECT_DIR$/data" />
     </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23726.102" />
-        <option value="bundled-python-sdk-5e1850174b45-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23726.102" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-PY-243.21565.199" />
+        <option value="bundled-python-sdk-cab1f2013843-4ae2d6a61b08-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.21565.199" />
       </set>
     </attachedChunks>
   </component>
@@ -88,6 +93,7 @@
       <workItem from="1732934113820" duration="5567000" />
       <workItem from="1733127109682" duration="2454000" />
       <workItem from="1733292569882" duration="5999000" />
+      <workItem from="1733636732299" duration="9292000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
