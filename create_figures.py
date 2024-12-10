@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 
 from word_cloud import visualise_column
-from likert_ranking import unbalanced_figure, Scale
+from stacked_bars import display_bars, Scale
 
 import warnings
 warnings.filterwarnings('ignore', category=FutureWarning)
@@ -19,20 +19,23 @@ visualise_column(df, "Q3 - We already have some council provided community techn
 
 print("Technology would you like to see more of, and how likely are you to use them:")
 visualise_column(df, 'Q4 - What technology would you like to see more of in our community? *\n\nPlease t...')
-# Define the column range using the start and end column names
-start_column = "Q5 - If these types of technologies were made available to the community, how li..."
-end_column = start_column
-unbalanced_figure(df, start_column, end_column, Scale.LIKELY)
+columns = ["Q5 - If these types of technologies were made available to the community, how li..."]
+display_bars(df, columns, Scale.LIKELY)
 
 print("How important are the following outcomes:")
-start_column = 'Q7 - Technology should be accessible and help people feel included, safe, and co...'
-end_column = 'Q11 - Technology should drive business growth and education opportunities, creati...'
-unbalanced_figure(df, start_column, end_column, Scale.IMPORTANT)
+columns = ['Q7 - Technology should be accessible and help people feel included, safe, and co...',
+       'Q8 - Technology should help preserve and protect our environment and make counci...',
+       'Q9 - Technology should enable council to plan thriving town centres, resilient i...',
+       'Q10 - Technology should make it easy to move around our city and use sustainable...',
+       'Q11 - Technology should drive business growth and education opportunities, creati...']
+display_bars(df, columns, Scale.IMPORTANT)
 
 print("How important that technology improves the following:")
-start_column = "Q13 - Traffic congestion. *"
-end_column = "Q18 - Staying informed and providing feedback on council decisions. *"
-unbalanced_figure(df, start_column, end_column, Scale.IMPORTANT)
+columns = ['Q13 - Traffic congestion. *', 'Q14 - A revitalised city centre. *',
+       'Q15 - Reliable and timely public transport. *',
+       'Q16 - Public safety. *', 'Q17 - Visibility of available parking. *',
+       'Q18 - Staying informed and providing feedback on council decisions. *']
+display_bars(df, columns, Scale.IMPORTANT)
 
 # ranking
 
@@ -44,7 +47,12 @@ visualise_column(df, "Q22 - Is there anything preventing you from using technolo
 # feedback about council or technology
 
 print("Rate digital skills:")
-start_column = "Q25 - How would you rate your digital skills when using community technology? *..."
-end_column = start_column
-unbalanced_figure(df, start_column, end_column, Scale.S)
+columns = ["Q25 - How would you rate your digital skills when using community technology? *..."]
+display_bars(df, columns, Scale.SKILL)
+
+
+# In[ ]:
+
+
+
 

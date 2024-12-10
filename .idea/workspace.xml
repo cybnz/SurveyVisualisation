@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Refactored for reusability and complete results">
-      <change afterPath="$PROJECT_DIR$/stacked_bars.ipynb" afterDir="false" />
+    <list default="true" id="0e477d57-3956-4ca9-af97-b87a66379458" name="Changes" comment="Stacked bars from 0 to 100%">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create_figures.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/create_figures.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/create_figures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stacked_bars.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/stacked_bars.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,7 +91,7 @@
       <workItem from="1732934113820" duration="5567000" />
       <workItem from="1733127109682" duration="2454000" />
       <workItem from="1733292569882" duration="5999000" />
-      <workItem from="1733636732299" duration="18394000" />
+      <workItem from="1733636732299" duration="20815000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -172,7 +173,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733769150063</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Stacked bars from 0 to 100%">
+      <option name="closed" value="true" />
+      <created>1733804115625</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1733804115625</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,6 +198,7 @@
     <MESSAGE value="Move Likert graphs into single plot" />
     <MESSAGE value="Basic strata sampling" />
     <MESSAGE value="Refactored for reusability and complete results" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored for reusability and complete results" />
+    <MESSAGE value="Stacked bars from 0 to 100%" />
+    <option name="LAST_COMMIT_MESSAGE" value="Stacked bars from 0 to 100%" />
   </component>
 </project>
