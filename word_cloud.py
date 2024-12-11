@@ -1,96 +1,37 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[22]:
 
 
+from bs4 import BeautifulSoup
 import pandas as pd
 import matplotlib.pyplot as plt
 import circlify
 import textwrap
-import spacy
-from bs4 import BeautifulSoup
-def visualise_column(df, column_name):
-    # global nlp
-    # Load spaCy's English model
-    # nlp = spacy.load('en_core_web_sm')
 
+def visualise_column(df, column_name):
+    """
+    Visualises a single column (with comma-separated values) as bubbles based on the frequency of the entries.
+    """
     global num_cols
     num_cols = df.shape[0]
 
-    # Extract the relevant column
+    # Extract and clean the relevant column (removes "Other, please specify." if present)
     column = df[column_name].str.replace('Other, please specify.,', '', regex=False)
 
-    # print(column)
-
-    # Split the column into individual entries (if it's a comma-separated string)
+    # Split the column into individual entries (comma-separated values)
     column_split = column.str.split(r'\s,|(?<=[a-zA-Z.]),(?=[a-zA-Z])').explode().str.strip()
 
-    # Apply the simplification function to each entry in the column
+    # Simplify the text (you can add specific text-cleaning steps here if necessary)
     simplified_column = column_split.apply(simplify_text)
 
     # Count the occurrences of each unique entry
     column_counts = simplified_column.value_counts()
 
-    # Compute circle positions
-    circles = circlify.circlify(
-        column_counts.tolist(),
-        show_enclosure=False,
-        target_enclosure=circlify.Circle(x=0, y=0, r=1)
-    )
-
-    # Reverse the order of the circles to match the order of data
-    circles = circles[::-1]
-
-    # Create just a figure and only one subplot
-    fig, ax = plt.subplots(figsize=(10, 10))
-
-    # Title
-    ax.set_title(column_name)
-
-    # Remove axes
-    ax.axis('off')
-
-    # Find axis boundaries
-    lim = max(
-        max(
-            abs(circle.x) + circle.r,
-            abs(circle.y) + circle.r,
-        )
-        for circle in circles
-    )
-    plt.xlim(-lim, lim)
-    plt.ylim(-lim, lim)
-
-    # List of labels (should correspond to unique values, not the original `df` column)
-    labels = column_counts.index
-
-    # Print circles with labels
-    for circle, label, count in zip(circles, labels, column_counts):
-        percentage = count / num_cols * 100
-
-        x, y, r = circle
-        ax.add_patch(plt.Circle((x, y), r, alpha=0.5, linewidth=2))
-
-        # Dynamically set the wrap width based on the circle's radius (2 * r)
-        wrap_width = int(2 * r * 50)  # Adjust the factor (here 10) to match text length better
-        if wrap_width == 0:
-            wrap_width = 10
-        # Wrap the label text based on the circle's width
-        wrapped_label = textwrap.fill(f"{label}\n({percentage:.1f}%)", width=wrap_width)
-
-        # Annotate the circle with the wrapped label
-        plt.annotate(
-            wrapped_label,
-            (x, y),
-            va='center',
-            ha='center',
-            fontsize=10,  # Adjust font size as needed
-            color='black'
-        )
-
-    # Show the plot
-    plt.show()
+    # Generate the circles and plot
+    circles, labels, column_counts, ax = setup_plot(column_name, column_counts)
+    render_circles(circles, labels, column_counts, ax, 'percentage')
 
 # Function to process and simplify each technology entry
 def simplify_text(text):
@@ -107,6 +48,114 @@ def simplify_text(text):
     # return " ".join(simplified_tokens)
     return text
 
-# visualise_column('Q4 - What technology would you like to see more of in our community? *\n\nPlease t...')
-# visualise_column("Q3 - We already have some council provided community technology in place. Which...")
+def setup_plot(column_name, column_counts):
+    """
+    Prepares the plot by calculating circle positions based on counts.
+    """
+    # Compute circle positions based on the counts
+    circles = circlify.circlify(
+        column_counts.tolist(),
+        show_enclosure=False,
+        target_enclosure=circlify.Circle(x=0, y=0, r=1)
+    )
+
+    # Reverse the circles to match the order of data
+    circles = circles[::-1]
+
+    # Create a figure and subplot
+    fig, ax = plt.subplots(figsize=(10, 10))
+
+    # Set the title
+    ax.set_title(column_name)
+
+    # Remove axes from the plot
+    ax.axis('off')
+
+    # Find axis boundaries
+    lim = max(
+        max(
+            abs(circle.x) + circle.r,
+            abs(circle.y) + circle.r,
+        )
+        for circle in circles
+    )
+    plt.xlim(-lim, lim)
+    plt.ylim(-lim, lim)
+
+    # Labels for the circles (unique values in the column)
+    labels = column_counts.index
+
+    return circles, labels, column_counts, ax
+
+def render_circles(circles, labels, column_counts, ax, format_type='percentage'):
+    """
+    Renders the circles (bubbles) with labels.
+    """
+    # Loop through each circle and label
+    for circle, label, count in zip(circles, labels, column_counts):
+        # Calculate the percentage of occurrences for the frequency-based visualization
+        if format_type == 'percentage':
+            percentage = count / num_cols * 100
+            wrapped_label = textwrap.fill(f"{label}\n({percentage:.1f}%)", width=int(2 * circle.r * 50))
+        elif format_type == 'ranking':
+            # For rankings, display the actual average ranking value
+            wrapped_label = textwrap.fill(f"{label}\n({1/count:.2f})", width=int(2 * circle.r * 50))
+
+        # Get circle properties (x, y, radius)
+        x, y, r = circle
+
+        # Draw the circle
+        ax.add_patch(plt.Circle((x, y), r, alpha=0.5, linewidth=2))
+
+        # Annotate the circle with the wrapped label
+        plt.annotate(
+            wrapped_label,
+            (x, y),
+            va='center',
+            ha='center',
+            fontsize=10,  # Font size
+            color='black'
+        )
+
+    # Display the plot
+    plt.show()
+
+def visualise_ranked_columns(df, columns):
+    """
+    Visualises bubbles based on **inverse** of average rankings for each category,
+    while keeping the label as the **actual** average ranking.
+    """
+    global num_cols
+    num_cols = df.shape[0]
+
+    # Compute the average ranking for each category (column)
+    average_rankings = [df[column_name].mean() for column_name in columns]
+
+    # Take the inverse of the rankings for bubble size (lower rankings => bigger circles)
+    inverse_rankings = [1 / avg for avg in average_rankings]
+
+    # Create a Series with the inverse rankings and corresponding column labels
+    column_counts = pd.Series(inverse_rankings, index=columns)
+
+    # Generate the circles and plot
+    circles, labels, column_counts, ax = setup_plot("Average Ranking", column_counts)
+    render_circles(circles, labels, column_counts, ax, 'ranking')
+
+# # Read the CSV file (replace with the correct path)
+# df = pd.read_csv('data/all-responses.csv')
+#
+# # Visualise the single-column data (comma-separated values)
+# # visualise_column(df, 'Q4 - What technology would you like to see more of in our community? *\n\nPlease t...')
+#
+# # List of columns representing rankings
+# columns = ['Q21_1 - Roads, footpaths, and cycle ways. ',
+#        'Q21_4 - Rubbish and recycling services. ',
+#        'Q21_5 - Building and planning. ',
+#        'Q21_6 - Outdoor spaces, such as parks. ',
+#        'Q21_7 - Public facilities, such as community centres.  ',
+#        'Q21_8 - Drinking water, wastewater, and stormwater services. ',
+#        'Q21_9 - Business licensing and compliance. ',
+#        'Q21_10 - Community services, such as events. ']
+# # Visualise the ranked data (inverse of average ranking for bubble size)
+# visualise_ranked_columns(df, columns)
 
