@@ -3,5 +3,5 @@ pandas~=2.2.3
 matplotlib~=3.9.2
 circlify~=0.15.0
 beautifulsoup4~=4.12.3
-numpy~=2.0.2
+numpy~=1.26.4
 plotly~=5.24.1
