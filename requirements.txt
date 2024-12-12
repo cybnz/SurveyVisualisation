@@ -1,7 +1,10 @@
 spacy~=3.8.2
-pandas~=2.2.3
+pandas~=2.2.1
 matplotlib~=3.9.2
 circlify~=0.15.0
 beautifulsoup4~=4.12.3
 numpy~=1.26.4
 plotly~=5.24.1
+top2vec~=1.0.36
+ipywidgets~=8.1.5
+ipython~=8.27.0
