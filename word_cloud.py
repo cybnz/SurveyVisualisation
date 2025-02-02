@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[22]:
+# In[13]:
 
 
 from bs4 import BeautifulSoup
@@ -30,7 +30,7 @@ def visualise_column(df, column_name):
     column_counts = simplified_column.value_counts()
 
     # Generate the circles and plot
-    circles, labels, column_counts, ax = setup_plot(column_name, column_counts)
+    circles, labels, column_counts, ax = setup_plot('Response Distribution (%)', column_counts)
     render_circles(circles, labels, column_counts, ax, 'percentage')
 
 # Function to process and simplify each technology entry
@@ -142,10 +142,10 @@ def visualise_ranked_columns(df, columns):
     render_circles(circles, labels, column_counts, ax, 'ranking')
 
 # # Read the CSV file (replace with the correct path)
-# df = pd.read_csv('data/all-responses.csv')
-#
-# # Visualise the single-column data (comma-separated values)
-# # visualise_column(df, 'Q4 - What technology would you like to see more of in our community? *\n\nPlease t...')
+df = pd.read_csv('data/all-responses.csv')
+
+# Visualise the single-column data (comma-separated values)
+# visualise_column(df, 'Q4 - What technology would you like to see more of in our community? *\n\nPlease t...')
 #
 # # List of columns representing rankings
 # columns = ['Q21_1 - Roads, footpaths, and cycle ways. ',

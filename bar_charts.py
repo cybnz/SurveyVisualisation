@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[7]:
+# In[38]:
 
 
 from matplotlib import pyplot as plt
@@ -49,8 +49,29 @@ def stack_counts(df, columns, scale):
 
     return counts_df
 
+def insert_line_break(text, char_num):
+    result = []
+    
+    while len(text) > char_num:
+        # Find the last space before or at the 40th character
+        space_index = text.rfind(' ', 0, char_num)
+        
+        if space_index == -1:  # No space found, force break at 40
+            space_index = char_num
+        else:
+            space_index += 1  # Include the space in the cut
+        
+        result.append(text[:space_index].rstrip())  # Add substring before the break
+        text = text[space_index:].lstrip()  # Remove processed part and leading space
+    
+    result.append(text)  # Add remaining text
+    return '<br>'.join(result)
+
 def stacked_bars(df, columns, scale):
     counts_df = stack_counts(df, columns, scale)
+    
+    # Break up long question labels
+    counts_df.index = counts_df.index.map(lambda text: insert_line_break(text, 40))
 
     if len(scale.value) == 5:
         colours = Colours.FIVE.value
@@ -59,7 +80,9 @@ def stacked_bars(df, columns, scale):
 
     # Create figure
     fig = px.bar(counts_df, x=scale.value, color_discrete_sequence=colours)
-    fig.update_xaxes(tickformat=",.2%")
+    fig.update_xaxes(tickformat=",.2%", title_text="Response Distribution (%)")
+    fig.update_yaxes(title_text="Issue")
+    fig.update_layout(legend_title="Response Category")
     fig.show()
 
 def ranking_counts(df, columns):
@@ -74,25 +97,40 @@ def ranking_counts(df, columns):
     return rankings
 
 def grouped_bars(df, columns):
+    # Get the counts of rankings per issue using the provided function.
     rankings = ranking_counts(df, columns)
+    rankings.index = rankings.index.map(lambda text: insert_line_break(text, 30))
+    # rankings now has issues as its index and ranking positions (1, 2, …, len(columns)-1) as its columns.
 
-    # Plotting
-    fig, ax = plt.subplots(figsize=(12, 8))
-
-    # Create grouped bar plot (issues grouped together on x-axis)
-    rankings.plot(kind='bar', ax=ax, width=0.8)
-
-    # Adding labels and title
-    ax.set_ylabel('Count of Rankings')
-    ax.set_xlabel('Issues')
-
-    # Rotate x-axis labels for clarity
-    ax.set_xticklabels(rankings.index, rotation=45, ha='right')
-
-    # Adding legend
-    ax.legend(title='Most important to least important', bbox_to_anchor=(1.05, 1), loc='upper left')
-
-    plt.show()
+    # Reset the index to convert the issue names into a column.
+    rankings_reset = rankings.reset_index().rename(columns={'index': 'Service'})
+    
+    # Convert the data from wide to long format.
+    # Each row will have an Issue, a Ranking, and the corresponding Count.
+    rankings_long = rankings_reset.melt(
+        id_vars='Service',
+        var_name='Ranking',
+        value_name='Count'
+    )
+    
+    # Create the grouped bar chart using Plotly Express.
+    fig = px.bar(
+        rankings_long,
+        x="Service",
+        y="Count",
+        color="Ranking",
+        barmode="group",  # This places the ranking bars side-by-side for each issue.
+        labels={
+            "Service": "Service",
+            "Count": "Count of ranking",
+            "Ranking": "Ranking".format(len(columns)-1)
+        }
+    )
+    
+    # Rotate x-axis labels for clarity, especially if issue names are long.
+    fig.update_layout(xaxis_tickangle=-45, height=600)
+    
+    fig.show()
 
 def average_bars(df, columns):
     df = df[columns]
@@ -116,9 +154,23 @@ def average_bars(df, columns):
     # Show the plot
     plt.show()
 
-# df = pd.read_csv('data/all-responses.csv')
-# stacked_bars(df, ['Q7 - Technology should be accessible and help people feel included, safe, and co...', 'Q11 - Technology should drive business growth and education opportunities, creati...'], Scale.IMPORTANT)
-# grouped_bars(df, ['Q21_1 - Roads, footpaths, and cycle ways. ', 'Q21_4 - Rubbish and recycling services. '])
+# df = pd.read_csv('data/all-responses-CLEANED.csv')
+# stacked_bars(df, ['Traffic congestion.',
+#            'A revitalised city centre.',
+#            'Reliable and timely public transport.',
+#            'Public safety.',
+#            'Visibility of available parking.',
+#            'Staying informed and providing feedback on council decisions.'],
+#             Scale.IMPORTANT)
+# columns = ['Roads, footpaths, and cycle ways.',
+#            'Rubbish and recycling services.',
+#            'Building and planning.',
+#            'Outdoor spaces, such as parks.',
+#            'Public facilities, such as community centres.',
+#            'Drinking water, wastewater, and stormwater services.',
+#            'Business licensing and compliance.',
+#            'Community services, such as events.']
+# grouped_bars(df, columns)
 # average_bars(df, ['Q21_1 - Roads, footpaths, and cycle ways. ',
 #        'Q21_4 - Rubbish and recycling services. ',
 #        'Q21_5 - Building and planning. ',
