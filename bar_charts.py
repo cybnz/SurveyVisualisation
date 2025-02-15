@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[38]:
-
-
+#%%
 from matplotlib import pyplot as plt
 from enum import Enum
 import plotly.express as px
@@ -32,19 +27,73 @@ class Colours(Enum):
     FIVE = ["#FF0000", "#FF7F7F", "#7F7F7F", "#7F7FFF", "#0000FF"]
     SEVEN = ["#FF0000", "#FF5555", "#FFAAAA", "#7F7F7F", "#AAAAFF", "#5555FF", "#0000FF"]
 
-def stack_counts(df, columns, scale):
-    df_subset = df[columns]
+import pandas as pd
 
-    # Turn long data into wide
-    counts_df = pd.melt(df_subset, var_name='question', value_name='response')
+def compute_age_weights(df, age_col='Q26 - Age: *'):
+    # Filter out unwanted age responses.
+    df_filtered = df[~df[age_col].isin(["Prefer not to say", "Under 16"])].copy()
 
-    # Count the occurrences of each category for each question
-    counts_df = pd.crosstab(counts_df['question'], counts_df['response'], dropna=False)
+    # Calculate sample counts and proportions for each age bracket.
+    sample_counts = df_filtered[age_col].value_counts()
+    total_sample = sample_counts.sum()
+    sample_proportions = sample_counts / total_sample
 
-    # Reorder columns
+    # Define the target population proportions.
+    population_proportions = {
+        '16-24': 0.1362463486,
+        '25-34': 0.1661635833,
+        '35-44': 0.1630233690,
+        '45-54': 0.1511927945,
+        '55-64': 0.1359785784,
+        '65-74': 0.1206426485,
+        '75-84': 0.0901411880,
+        '85+':   0.0335199611
+    }
+
+    # Calculate weight for each age bracket: population proportion / sample proportion.
+    age_weights = {}
+    for age, pop_prop in population_proportions.items():
+        sample_prop = sample_proportions.get(age, 0)
+        if sample_prop > 0:
+            age_weights[age] = pop_prop / sample_prop
+        else:
+            age_weights[age] = 0  # or handle appropriately if no respondents in the age bracket
+
+    return age_weights
+
+def stack_counts(df, columns, scale, pop_rep=True):
+    if pop_rep is True:
+        # Keep only the desired columns plus the age column.
+        df_subset = df[columns + ['Q26 - Age: *']].copy()
+        # Filter out rows with "Prefer not to say" or "Under 16"
+        df_subset = df_subset[~df_subset["Q26 - Age: *"].isin(["Prefer not to say", "Under 16"])].copy()
+
+        # Compute age weights using the helper function.
+        age_weights = compute_age_weights(df_subset, age_col='Q26 - Age: *')
+
+        # Melt the dataframe so each row is one response with its age.
+        df_long = pd.melt(df_subset,
+                          id_vars='Q26 - Age: *',
+                          var_name='question',
+                          value_name='response')
+
+        # Map the weight for each row based on its age.
+        df_long['weight'] = df_long['Q26 - Age: *'].map(age_weights)
+
+        # Group by question and response to sum the weights.
+        weighted_counts = df_long.groupby(['question', 'response'])['weight'].sum().unstack(fill_value=0)
+        counts_df = weighted_counts
+    else:
+        # If not applying population representative weighting,
+        # just count occurrences of each response for each question.
+        df_subset = df[columns].copy()
+        df_long = pd.melt(df_subset, var_name='question', value_name='response')
+        counts_df = pd.crosstab(df_long['question'], df_long['response'], dropna=False)
+
+    # Reorder columns according to the scale (assuming scale.value is an ordered list)
     counts_df = counts_df[scale.value]
 
-    # Calc percent
+    # Convert counts to percentages (each row sums to 1)
     counts_df = counts_df.div(counts_df.sum(axis=1), axis=0)
 
     return counts_df
@@ -67,8 +116,8 @@ def insert_line_break(text, char_num):
     result.append(text)  # Add remaining text
     return '<br>'.join(result)
 
-def stacked_bars(df, columns, scale):
-    counts_df = stack_counts(df, columns, scale)
+def stacked_bars(df, columns, scale, pop_rep=True):
+    counts_df = stack_counts(df, columns, scale, pop_rep=pop_rep)
     
     # Break up long question labels
     counts_df.index = counts_df.index.map(lambda text: insert_line_break(text, 40))
@@ -154,14 +203,14 @@ def average_bars(df, columns):
     # Show the plot
     plt.show()
 
-# df = pd.read_csv('data/all-responses-CLEANED.csv')
-# stacked_bars(df, ['Traffic congestion.',
-#            'A revitalised city centre.',
-#            'Reliable and timely public transport.',
-#            'Public safety.',
-#            'Visibility of available parking.',
-#            'Staying informed and providing feedback on council decisions.'],
-#             Scale.IMPORTANT)
+df = pd.read_csv('data/all-responses-CLEANED.csv')
+stacked_bars(df, ['Traffic congestion.',
+           'A revitalised city centre.',
+           'Reliable and timely public transport.',
+           'Public safety.',
+           'Visibility of available parking.',
+           'Staying informed and providing feedback on council decisions.'],
+            Scale.IMPORTANT)
 # columns = ['Roads, footpaths, and cycle ways.',
 #            'Rubbish and recycling services.',
 #            'Building and planning.',
@@ -179,4 +228,3 @@ def average_bars(df, columns):
 #        'Q21_8 - Drinking water, wastewater, and stormwater services. ',
 #        'Q21_9 - Business licensing and compliance. ',
 #        'Q21_10 - Community services, such as events. '])
-
