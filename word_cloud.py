@@ -1,16 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[13]:
-
-
+#%%
 from bs4 import BeautifulSoup
 import pandas as pd
 import matplotlib.pyplot as plt
 import circlify
 import textwrap
 
-def visualise_column(df, column_name):
+def visualise_column(df, column_name, pop_rep=False):
     """
     Visualises a single column (with comma-separated values) as bubbles based on the frequency of the entries.
     """
@@ -29,9 +24,66 @@ def visualise_column(df, column_name):
     # Count the occurrences of each unique entry
     column_counts = simplified_column.value_counts()
 
+    if pop_rep is True:
+        age_column_counts = count_categories_by_age(df, column_name, 'Q26 - Age: *')
+
+        weighted_column_counts = weight_counts(age_column_counts, 'Q26 - Age: *')
+        column_counts = weighted_column_counts.groupby(column_name).sum()['count'].sort_values(ascending=False)
+
     # Generate the circles and plot
     circles, labels, column_counts, ax = setup_plot('Response Distribution (%)', column_counts)
     render_circles(circles, labels, column_counts, ax, 'percentage')
+
+def count_categories_by_age(df, response_column, age_column):
+    # Make a copy of the DataFrame
+    df_clean = df.copy()
+    df_clean = df_clean[[response_column, age_column]]
+    df_clean = df_clean.loc[~df_clean[age_column].isin(['Under 16', 'Prefer not to say'])]
+
+    # Remove the "Other, please specify.," text if present
+    df_clean[response_column] = df_clean[response_column].str.replace('Other, please specify.,', '', regex=False)
+
+    # Split the responses into a list; the regex accounts for comma separation with/without whitespace
+    df_clean['response_list'] = df_clean[response_column].str.split(r'\s,|(?<=[a-zA-Z.]),(?=[a-zA-Z])')
+
+    # Explode the list so that each response is its own row, keeping the corresponding age
+    df_exploded = df_clean.explode('response_list')
+
+    # Strip any extra whitespace and simplify the text (assuming simplify_text is defined)
+    df_exploded[response_column] = df_exploded['response_list'].str.strip().apply(simplify_text)
+
+    # Group by age and response, then count the occurrences
+    grouped_counts = (
+        df_exploded.groupby([age_column, response_column])
+                  .size()
+                  .reset_index(name='count')
+    )
+
+    return grouped_counts
+
+def weight_counts(age_column_counts, age_column):
+    population_proportions = {
+        '16-24': 0.1362463486,
+        '25-34': 0.1661635833,
+        '35-44': 0.1630233690,
+        '45-54': 0.1511927945,
+        '55-64': 0.1359785784,
+        '65-74': 0.1206426485,
+        '75-84': 0.0901411880,
+        '85+': 0.0335199611
+    }
+
+    # Calculate sample counts per age bracket
+    sample_counts = age_column_counts.groupby(age_column)['count'].sum() / age_column_counts['count'].sum()
+
+    # Compute weights
+    weights = {age: population_proportions.get(age, 0) / sample_counts.get(age, 1)
+               for age in population_proportions.keys()}
+
+    # Apply weights to each row
+    age_column_counts['count'] = age_column_counts.apply(lambda row: row['count'] * weights.get(row[age_column], 1), axis=1)
+
+    return age_column_counts
 
 # Function to process and simplify each technology entry
 def simplify_text(text):
@@ -142,10 +194,10 @@ def visualise_ranked_columns(df, columns):
     render_circles(circles, labels, column_counts, ax, 'ranking')
 
 # # Read the CSV file (replace with the correct path)
-df = pd.read_csv('data/all-responses.csv')
-
-# Visualise the single-column data (comma-separated values)
-# visualise_column(df, 'Q4 - What technology would you like to see more of in our community? *\n\nPlease t...')
+# df = pd.read_csv('data/all-responses.csv')
+# 
+# # Visualise the single-column data (comma-separated values)
+# visualise_column(df, 'Q4 - What technology would you like to see more of in our community? *\n\nPlease t...', True)
 #
 # # List of columns representing rankings
 # columns = ['Q21_1 - Roads, footpaths, and cycle ways. ',
@@ -158,4 +210,3 @@ df = pd.read_csv('data/all-responses.csv')
 #        'Q21_10 - Community services, such as events. ']
 # # Visualise the ranked data (inverse of average ranking for bubble size)
 # visualise_ranked_columns(df, columns)
-
