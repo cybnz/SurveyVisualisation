@@ -221,7 +221,7 @@ def average_bars(df, columns, pop_rep=False):
     fig = px.bar(
         average_rankings_df,
         x='Service',
-        y='Average Ranking',
+        y='Average Ranking (lower is better)',
         labels={
             "Service": "Service",
             "Average Ranking (lower is better)": "Average Ranking (lower is better)",
