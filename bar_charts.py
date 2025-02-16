@@ -27,8 +27,6 @@ class Colours(Enum):
     FIVE = ["#FF0000", "#FF7F7F", "#7F7F7F", "#7F7FFF", "#0000FF"]
     SEVEN = ["#FF0000", "#FF5555", "#FFAAAA", "#7F7F7F", "#AAAAFF", "#5555FF", "#0000FF"]
 
-import pandas as pd
-
 def compute_age_weights(df, age_col='Q26 - Age: *'):
     # Filter out unwanted age responses.
     df_filtered = df[~df[age_col].isin(["Prefer not to say", "Under 16"])].copy()
@@ -181,50 +179,76 @@ def grouped_bars(df, columns):
     
     fig.show()
 
-def average_bars(df, columns):
-    df = df[columns]
+def average_bars(df, columns, pop_rep=False):
+    if pop_rep:
+        # Keep only the desired service columns plus the age column.
+        df_subset = df[columns + ['Q26 - Age: *']].copy()
+        # Exclude rows with "Prefer not to say" or "Under 16"
+        df_subset = df_subset[~df_subset["Q26 - Age: *"].isin(["Prefer not to say", "Under 16"])].copy()
 
-    # Calculate the average ranking for each category (mean of each column)
-    average_rankings = df.mean()
+        # Compute age weights using the helper function.
+        age_weights = compute_age_weights(df_subset, age_col='Q26 - Age: *')
+        # Map the weight for each row based on its age.
+        df_subset['weight'] = df_subset['Q26 - Age: *'].map(age_weights)
 
-    # Sort the rankings for better visualization
-    average_rankings_sorted = average_rankings.sort_values()
+        # For each service, compute the weighted average ranking:
+        # weighted_average = sum(ranking * weight) / sum(weight)
+        weighted_avgs = {}
+        for col in columns:
+            # Ensure that the values are numeric.
+            df_subset[col] = pd.to_numeric(df_subset[col], errors='coerce')
+            weighted_sum = (df_subset[col] * df_subset['weight']).sum()
+            total_weight = df_subset['weight'].sum()
+            weighted_avgs[col] = weighted_sum / total_weight if total_weight else None
 
-    # Plotting
-    plt.figure(figsize=(10, 6))
-    average_rankings_sorted.plot(kind='bar')
+        # Convert the dictionary to a DataFrame.
+        average_rankings_df = pd.DataFrame(list(weighted_avgs.items()),
+                                           columns=['Service', 'Average Ranking'])
+    else:
+        # Compute simple (unweighted) average rankings.
+        df_subset = df[columns]
+        average_rankings = df_subset.mean()
+        average_rankings_df = average_rankings.sort_values(ascending=True).reset_index()
+        average_rankings_df.columns = ['Service', 'Average Ranking']
 
-    # Customize the chart
-    plt.xlabel('Issue')
-    plt.ylabel('Average Ranking')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
+    # Sort by average ranking for visualization.
+    average_rankings_df = average_rankings_df.sort_values('Average Ranking', ascending=True)
 
-    # Show the plot
-    plt.show()
+    # Create a bar chart using Plotly Express.
+    fig = px.bar(
+        average_rankings_df,
+        x='Service',
+        y='Average Ranking',
+        labels={
+            "Service": "Service",
+            "Average Ranking": "Average Ranking"
+        }
+    )
+
+    # Rotate x-axis labels for better readability.
+    fig.update_layout(
+        xaxis_tickangle=-45,
+        height=600,
+        showlegend=False  # Legend not needed.
+    )
+
+    fig.show()
 
 df = pd.read_csv('data/all-responses-CLEANED.csv')
-stacked_bars(df, ['Traffic congestion.',
-           'A revitalised city centre.',
-           'Reliable and timely public transport.',
-           'Public safety.',
-           'Visibility of available parking.',
-           'Staying informed and providing feedback on council decisions.'],
-            Scale.IMPORTANT)
-# columns = ['Roads, footpaths, and cycle ways.',
-#            'Rubbish and recycling services.',
-#            'Building and planning.',
-#            'Outdoor spaces, such as parks.',
-#            'Public facilities, such as community centres.',
-#            'Drinking water, wastewater, and stormwater services.',
-#            'Business licensing and compliance.',
-#            'Community services, such as events.']
+# stacked_bars(df, ['Traffic congestion.',
+#            'A revitalised city centre.',
+#            'Reliable and timely public transport.',
+#            'Public safety.',
+#            'Visibility of available parking.',
+#            'Staying informed and providing feedback on council decisions.'],
+#             Scale.IMPORTANT)
+columns = ['Roads, footpaths, and cycle ways.',
+           'Rubbish and recycling services.',
+           'Building and planning.',
+           'Outdoor spaces, such as parks.',
+           'Public facilities, such as community centres.',
+           'Drinking water, wastewater, and stormwater services.',
+           'Business licensing and compliance.',
+           'Community services, such as events.']
 # grouped_bars(df, columns)
-# average_bars(df, ['Q21_1 - Roads, footpaths, and cycle ways. ',
-#        'Q21_4 - Rubbish and recycling services. ',
-#        'Q21_5 - Building and planning. ',
-#        'Q21_6 - Outdoor spaces, such as parks. ',
-#        'Q21_7 - Public facilities, such as community centres.  ',
-#        'Q21_8 - Drinking water, wastewater, and stormwater services. ',
-#        'Q21_9 - Business licensing and compliance. ',
-#        'Q21_10 - Community services, such as events. '])
+average_bars(df, columns, True)
