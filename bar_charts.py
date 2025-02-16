@@ -4,6 +4,9 @@ from enum import Enum
 import plotly.express as px
 import pandas as pd
 
+from word_cloud import calculate_counts
+
+
 class Scale(Enum):
     LIKELY = ['Very unlikely ',
         'Unlikely ',
@@ -203,16 +206,16 @@ def average_bars(df, columns, pop_rep=False):
 
         # Convert the dictionary to a DataFrame.
         average_rankings_df = pd.DataFrame(list(weighted_avgs.items()),
-                                           columns=['Service', 'Average Ranking'])
+                                           columns=['Service', 'Average Ranking (lower is better)'])
     else:
         # Compute simple (unweighted) average rankings.
         df_subset = df[columns]
         average_rankings = df_subset.mean()
         average_rankings_df = average_rankings.sort_values(ascending=True).reset_index()
-        average_rankings_df.columns = ['Service', 'Average Ranking']
+        average_rankings_df.columns = ['Service', 'Average Ranking (lower is better)']
 
     # Sort by average ranking for visualization.
-    average_rankings_df = average_rankings_df.sort_values('Average Ranking', ascending=True)
+    average_rankings_df = average_rankings_df.sort_values('Average Ranking (lower is better)', ascending=True)
 
     # Create a bar chart using Plotly Express.
     fig = px.bar(
@@ -221,7 +224,7 @@ def average_bars(df, columns, pop_rep=False):
         y='Average Ranking',
         labels={
             "Service": "Service",
-            "Average Ranking": "Average Ranking"
+            "Average Ranking (lower is better)": "Average Ranking (lower is better)",
         }
     )
 
@@ -234,7 +237,36 @@ def average_bars(df, columns, pop_rep=False):
 
     fig.show()
 
-df = pd.read_csv('data/all-responses-CLEANED.csv')
+def percent_bars(df, column, pop_rep=False):
+    # Get counts using the provided helper function.
+    counts_df = calculate_counts(df, column, pop_rep=pop_rep)
+
+    # Use df.shape[0] as the denominator, as more than one answer may be selected.
+    percent_df = counts_df / df.shape[0] * 100
+
+    # Reset index and melt the DataFrame for plotting.
+    percent_long = percent_df.reset_index().melt(id_vars=column,
+                                                   var_name='response',
+                                                   value_name='percentage')
+
+    percent_long[column] = percent_long[column].map(lambda text: insert_line_break(text, 40))
+
+    # Create a grouped bar chart using Plotly Express.
+    fig = px.bar(
+        percent_long,
+        x=column,
+        y='percentage',
+        color='response',
+        barmode='group',
+        labels={column: 'Question', 'percentage': 'Percentage (%)'},
+        title='Response Distribution (%)'
+    )
+
+    # Adjust layout for better readability.
+    fig.update_layout(xaxis_tickangle=-45, height=600)
+    fig.show()
+
+# df = pd.read_csv('data/all-responses-CLEANED.csv')
 # stacked_bars(df, ['Traffic congestion.',
 #            'A revitalised city centre.',
 #            'Reliable and timely public transport.',
@@ -242,13 +274,14 @@ df = pd.read_csv('data/all-responses-CLEANED.csv')
 #            'Visibility of available parking.',
 #            'Staying informed and providing feedback on council decisions.'],
 #             Scale.IMPORTANT)
-columns = ['Roads, footpaths, and cycle ways.',
-           'Rubbish and recycling services.',
-           'Building and planning.',
-           'Outdoor spaces, such as parks.',
-           'Public facilities, such as community centres.',
-           'Drinking water, wastewater, and stormwater services.',
-           'Business licensing and compliance.',
-           'Community services, such as events.']
+# columns = ['Roads, footpaths, and cycle ways.',
+#            'Rubbish and recycling services.',
+#            'Building and planning.',
+#            'Outdoor spaces, such as parks.',
+#            'Public facilities, such as community centres.',
+#            'Drinking water, wastewater, and stormwater services.',
+#            'Business licensing and compliance.',
+#            'Community services, such as events.']
 # grouped_bars(df, columns)
-average_bars(df, columns, True)
+# average_bars(df, columns, True)
+# percent_bars(df, 'What technology would you like to see more of in our community?', True)

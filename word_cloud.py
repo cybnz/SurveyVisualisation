@@ -5,10 +5,7 @@ import matplotlib.pyplot as plt
 import circlify
 import textwrap
 
-def visualise_column(df, column_name, pop_rep=False):
-    """
-    Visualises a single column (with comma-separated values) as bubbles based on the frequency of the entries.
-    """
+def calculate_counts(df, column_name, pop_rep=False):
     global num_cols
     num_cols = df.shape[0]
 
@@ -29,6 +26,14 @@ def visualise_column(df, column_name, pop_rep=False):
 
         weighted_column_counts = weight_counts(age_column_counts, 'Q26 - Age: *')
         column_counts = weighted_column_counts.groupby(column_name).sum()['count'].sort_values(ascending=False)
+
+    return column_counts
+
+def visualise_column(df, column_name, pop_rep=False):
+    """
+    Visualises a single column (with comma-separated values) as bubbles based on the frequency of the entries.
+    """
+    column_counts = calculate_counts(df, column_name, pop_rep=pop_rep)
 
     # Generate the circles and plot
     circles, labels, column_counts, ax = setup_plot('Response Distribution (%)', column_counts)
@@ -195,7 +200,7 @@ def visualise_ranked_columns(df, columns):
 
 # # Read the CSV file (replace with the correct path)
 # df = pd.read_csv('data/all-responses.csv')
-# 
+#
 # # Visualise the single-column data (comma-separated values)
 # visualise_column(df, 'Q4 - What technology would you like to see more of in our community? *\n\nPlease t...', True)
 #
